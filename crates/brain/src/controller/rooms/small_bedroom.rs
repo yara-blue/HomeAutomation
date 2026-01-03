@@ -253,19 +253,19 @@ pub(crate) fn goal_temp_now() -> f64 {
         ((10, 00), 19.5),
         ((11, 00), 21.0),
         ((12, 00), 22.0),
-        ((19, 00), 10.0),
-        ((21, 00), 19.0),
+        ((19, 00), 19.0),
     ]);
 
     goal_now(goals, 19.0)
 }
 
 fn air_filtration_now(pm2_5_measurement: &Option<(f32, Zoned)>) -> Option<u16> {
+    const LOW: u16 = 85;
     let pm2_5_expiration = 10.minutes();
     let goals =
-        BTreeMap::from([((00, 00), 80), ((18, 00), 80), ((22, 30), 80)]);
+        BTreeMap::from([((00, 00), LOW), ((18, 00), 100), ((21, 30), LOW)]);
 
-    let default = goal_now(goals, 80);
+    let default = goal_now(goals, LOW);
 
     let Some((pm2_5, measured_time)) = pm2_5_measurement else {
         return Some(default);
