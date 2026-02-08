@@ -162,6 +162,7 @@ pub fn start(
             "small_bedroom:table",
             "small_bedroom:bureau",
             "small_bedroom:piano",
+            "small_bedroom:bookcase",
         ],
         allowed_radiators: vec!["small_bedroom:radiator"],
     };
