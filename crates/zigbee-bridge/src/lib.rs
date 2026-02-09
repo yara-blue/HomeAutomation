@@ -16,7 +16,7 @@ mod parse;
 mod radiator;
 
 const MQTT_PORT: u16 = 1883;
-const LIGHT_MODELS: [(&str, Model); 16] = [
+const LIGHT_MODELS: [(&str, Model); 17] = [
     ("kitchen:fridge", Model::TradfriE14Color),
     ("kitchen:hallway", Model::TradfriE27),
     ("kitchen:hood_left", Model::TradfriCandle),
@@ -30,6 +30,7 @@ const LIGHT_MODELS: [(&str, Model); 16] = [
     ("small_bedroom:table", Model::Hue1600Lm),
     ("small_bedroom:bureau", Model::HueGen1),
     ("small_bedroom:piano", Model::TradfriE27),
+    ("small_bedroom:bookcase", Model::Hue1600Lm),
     ("bathroom:ceiling", Model::HueGen1),
     ("hallway:ceiling", Model::TradfriE27),
     ("toilet:ceiling", Model::HueGen2),
