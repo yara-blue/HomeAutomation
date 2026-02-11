@@ -491,10 +491,10 @@ impl AudioController {
         self.mode.next();
         info!("Switching to mode {:?}", self.mode);
 
-        if self.mode == AudioMode::Meditation && !Self::is_meditation_time() {
-            self.mode.next();
-            trace!("Skipping meditation");
-        }
+        // if self.mode == AudioMode::Meditation && !Self::is_meditation_time() {
+        //     self.mode.next();
+        //     trace!("Skipping meditation");
+        // }
 
         // Check if a playlist is stored in the db, and still exists
         let new_playlist_name = self.db.fetch_playlist_name(&self.mode);
