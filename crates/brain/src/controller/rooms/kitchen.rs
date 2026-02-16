@@ -73,7 +73,7 @@ pub async fn run(
     let db = open_or_wipe(tree)?;
     let mut next_update = Instant::now() + INTERVAL;
 
-    let wakeup_job = Job::every_day_at(10, 0, Event::WakeupKitchen, None);
+    let wakeup_job = Job::every_day_at(9, 0, Event::WakeupKitchen, None);
     let res = system
         .system
         .jobs

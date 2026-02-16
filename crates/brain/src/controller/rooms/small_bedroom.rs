@@ -250,7 +250,8 @@ pub(super) fn is_nap_time() -> bool {
 pub(crate) fn goal_temp_now() -> f64 {
     let goals = BTreeMap::from([
         ((0, 00), 19.0),
-        ((10, 00), 19.5),
+        ((9, 00), 20.0),
+        ((10, 00), 20.5),
         ((11, 00), 21.0),
         ((12, 00), 21.5),
         ((19, 00), 19.0),
