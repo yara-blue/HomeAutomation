@@ -2,6 +2,7 @@ use std::time::Duration;
 
 use futures_concurrency::future::Race;
 use futures_util::FutureExt;
+use jiff::civil::Time;
 use serde::{Deserialize, Serialize};
 use tokio::sync::broadcast;
 use tokio::time::{sleep_until, Instant};
@@ -17,6 +18,7 @@ const INTERVAL: Duration = Duration::from_secs(5);
 #[derive(PartialEq, Eq, Serialize, Deserialize, Default)]
 enum State {
     Sleep,
+    Morning,
     #[default]
     Daylight,
     Override,
@@ -97,9 +99,15 @@ pub async fn run(
                 wakeup_some_lamps(&mut system).await;
             }
             Res::Event(RelevantEvent::Daylight) => {
-                db.state().set(&State::Daylight)?;
-                update(&mut system).await;
-                system.all_lamps_on().await;
+                if is_late_morning() {
+                    db.state().set(&State::Daylight)?;
+                    update(&mut system).await;
+                    system.all_lamps_on().await;
+                } else {
+                    db.state().set(&State::Morning)?;
+                    update(&mut system).await;
+                    system.all_lamps_but_one_on("kitchen:hallway").await;
+                }
             }
             Res::Event(RelevantEvent::Override) => {
                 db.state().set(&State::Override)?;
@@ -107,7 +115,11 @@ pub async fn run(
                 system.all_lamps_on().await;
             }
             Res::ShouldUpdate => {
-                if db.state().get()? == State::Daylight {
+                let state = db.state().get()?;
+                if state == State::Daylight
+                    || (state == State::Morning && is_late_morning())
+                {
+                    db.state().set(&State::Daylight)?;
                     update(&mut system).await;
                     system.all_lamps_on().await;
                 }
@@ -115,6 +127,10 @@ pub async fn run(
             }
         }
     }
+}
+
+fn is_late_morning() -> bool {
+    crate::time::now().datetime().time() > Time::new(11, 0, 0, 0).unwrap()
 }
 
 async fn wakeup_some_lamps(system: &mut RestrictedSystem) {
