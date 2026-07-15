@@ -108,6 +108,7 @@ impl Controller {
                 radiator_name.to_owned(),
                 RadiatorProperty::Reference(reference).into(),
             ))
+            // TODO: make error
             .expect("Sender should never be dropped");
     }
 
